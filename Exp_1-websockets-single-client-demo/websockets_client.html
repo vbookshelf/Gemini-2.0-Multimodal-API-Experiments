@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebSocket Example</title>
+</head>
+<body>
+    <h1>WebSocket Example</h1>
+
+    <!-- Input field for typing messages -->
+    <input id="message" type="text" placeholder="Type a message" />
+
+    <!-- Button to send the message to the server -->
+    <button id="send">Send</button>
+
+    <!-- Div to display the messages exchanged with the server -->
+    <div id="output"></div>
+
+    <script>
+        // Create a new WebSocket connection to the server
+        const ws = new WebSocket("ws://localhost:6789");
+
+        // Event handler when the WebSocket connection is opened
+        ws.onopen = () => {
+            console.log("WebSocket connection opened");
+            // Display a message on the webpage indicating the connection is open
+            document.getElementById("output").innerHTML += "<p>Connection opened!</p>";
+        };
+
+        // Event handler for when a message is received from the server
+        ws.onmessage = (event) => {
+            console.log("Message received:", event.data); // Log the received message to the console
+            // Display the received message on the webpage
+            document.getElementById("output").innerHTML += `<p>${event.data}</p>`;
+        };
+
+        // Event handler for when the WebSocket connection is closed
+        ws.onclose = () => {
+            console.log("WebSocket connection closed"); // Log a message to the console
+            // Display a message on the webpage indicating the connection is closed
+            document.getElementById("output").innerHTML += "<p>Connection closed!</p>";
+        };
+
+        // Event handler for when there is an error with the WebSocket connection
+        ws.onerror = (error) => {
+            console.error("WebSocket error:", error); // Log the error to the console
+            // Display an error message on the webpage
+            document.getElementById("output").innerHTML += "<p>Error occurred!</p>";
+        };
+
+        // Event listener for the "Send" button click event
+        document.getElementById("send").onclick = () => {
+            const message = document.getElementById("message").value; // Get the text from the input field
+            ws.send(message); // Send the message to the WebSocket server
+        };
+    </script>
+</body>
+</html>
