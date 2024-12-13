@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multi-Client Chat</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        #output {
+            border: 1px solid #ccc;
+            padding: 10px;
+            height: 300px;
+            overflow-y: auto;
+            margin-top: 10px;
+        }
+        input {
+            width: calc(100% - 70px);
+            padding: 10px;
+            margin-right: 5px;
+        }
+        button {
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>WebSocket Multi-Client Chat</h1>
+
+    <!-- Input field for typing messages -->
+    <input id="message" type="text" placeholder="Type your message here..." />
+
+    <!-- Button to send the message -->
+    <button id="send">Send</button>
+
+    <!-- Output div to display chat messages -->
+    <div id="output"></div>
+
+    <script>
+        // Establish a WebSocket connection to the server
+        const ws = new WebSocket("ws://localhost:6789");
+
+        // Reference to the output div for displaying messages
+        const outputDiv = document.getElementById("output");
+
+        // Add a message to the output div
+        const addMessageToChat = (message) => {
+            outputDiv.innerHTML += `<p>${message}</p>`;
+            // Auto-scroll to the bottom of the chat
+            outputDiv.scrollTop = outputDiv.scrollHeight;
+        };
+
+        // Event handler for when the WebSocket connection is opened
+        ws.onopen = () => {
+            console.log("Connected to WebSocket server");
+            addMessageToChat("<em>Connected to the server.</em>");
+        };
+
+        // Event handler for when a message is received from the server
+        ws.onmessage = (event) => {
+            console.log("Message received:", event.data);
+            addMessageToChat(event.data); // Display the received message
+        };
+
+        // Event handler for when the WebSocket connection is closed
+        ws.onclose = () => {
+            console.log("WebSocket connection closed");
+            addMessageToChat("<em>Connection closed.</em>");
+        };
+
+        // Event handler for when an error occurs in the WebSocket connection
+        ws.onerror = (error) => {
+            console.error("WebSocket error:", error);
+            addMessageToChat("<em>Error occurred!</em>");
+        };
+
+        // Event listener for the "Send" button
+        document.getElementById("send").onclick = () => {
+            const message = document.getElementById("message").value.trim(); // Get the message from the input field
+            if (message) {
+                ws.send(message); // Send the message to the WebSocket server
+                document.getElementById("message").value = ""; // Clear the input field
+            }
+        };
+    </script>
+</body>
+</html>
