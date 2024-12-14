@@ -10,6 +10,9 @@ My experiments with Gemini 2.0 Multimodal.
   Sam Witteveen<br>
   https://www.youtube.com/watch?v=CZ9WaMbiTO4
 
+- Google Ai Studio<br>
+  https://aistudio.google.com/live
+
 - Gemini 2.0 Cookbook<br>
   https://github.com/google-gemini/cookbook/tree/main/gemini-2
 
